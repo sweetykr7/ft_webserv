@@ -7,6 +7,11 @@
 #include <unistd.h>
 #include <iostream>
 
+struct test_struct {
+    int a;
+    int b;
+};
+
 int main()
 {
     // All needed variables.
@@ -105,11 +110,30 @@ int main()
                 // Put this new socket connection also as a 'filter' event
                 // to watch in kqueue, so we can now watch for events on this
                 // new socket.
-                EV_SET(change_event, socket_connection_fd, EVFILT_READ, EV_ADD, 0, 0, NULL);
-                if (kevent(kq, change_event, 1, NULL, 0, NULL) < 0)
+
+                test_struct test_str;
+                test_str.a = 1111;
+                test_str.b = 2222;
+
+                EV_SET(&change_event[0], socket_connection_fd, EVFILT_READ, EV_ADD, 0, 0, &test_str);
+                // if (kevent(kq, change_event, 1, NULL, 0, NULL) < 0)
+                // {
+                //     perror("kevent error");
+                // }
+                if (kevent(kq, &change_event[0], 1, NULL, 0, NULL) < 0)
                 {
                     perror("kevent error");
                 }
+                EV_SET(&change_event[1], socket_connection_fd, EVFILT_WRITE, EV_ADD | EV_DISABLE, 0, 0, 0);
+                if (kevent(kq, &change_event[1], 1, NULL, 0, NULL) < 0)
+                {
+                    perror("kevent error");
+                }
+                // EV_SET(&event[0], connfd, EVFILT_READ, EV_EOF | EV_ADD, 0, 0, clients_->GetData());
+                // EV_SET(&event[1], connfd, EVFILT_WRITE, EV_ADD | EV_DISABLE, 0, 0, clients_->GetData());
+                // EV_SET(&event[2], connfd, EVFILT_TIMER, EV_ADD, NOTE_SECONDS, config->timeout_, clients_->GetData());
+
+                
             }
             else if (event[i].filter & EVFILT_READ)
             {
@@ -122,17 +146,55 @@ int main()
                 char *buf = new char[buf_size];
                 size_t bytes_read = recv(event_fd, buf, buf_size, 0);
                 printf("read %zu bytes\n", bytes_read);
-
+                printf("read data : %s\n", buf);
+                
+                // printf("udata check : %d\n",((test_struct *)event[i].udata)->a);
                 //처리
-				printf("read data : %s\n", buf);
+				struct kevent disable_event;
+                EV_SET(&disable_event, event_fd, EVFILT_READ, EV_DISABLE, 0, 0, 0);
+                if (kevent(kq, &disable_event, 1, NULL, 0, NULL) < 0)
+                {
+                    perror("kevent error");
+                }
+
+                
+                printf("pass this=======\n");
+                // write(event_fd, sendchar.c_str(), 10);
+
                 
                 
             }
             // else if (event[i].filter & EVFILT_WRITE)
-            // {
-            //     const char* message = "HTTP/1.1 200 OK\r\nContent-Length:X\r\n\r\n";
-            //     send(event_fd, message, strlen(message), 0);
-            // }
+            
+            struct kevent disable_event2;
+            EV_SET(&disable_event2, event_fd, EVFILT_WRITE, EV_ENABLE, 0, 0, 0);
+            printf("pass this=======\n");   
+            if (kevent(kq, &disable_event2, 1, NULL, 0, NULL) < 0)
+            {
+                perror("kevent error");
+            }
+            printf("pass this123132132123\n");
+            const char* message = "HTTP/1.1 200 OK\r\nContent-Length:X\r\n\r\n";
+            send(event_fd, message, strlen(message), 0);
+            printf("send complete\n");
+            printf("pass this=======\n");
+            EV_SET(&disable_event2, event_fd, EVFILT_WRITE, EV_DISABLE, 0, 0, 0);
+            if (kevent(kq, &disable_event2, 1, NULL, 0, NULL) < 0)
+            {
+                perror("kevent error");
+            }
+
+            struct kevent disable_event;
+            EV_SET(&disable_event, event_fd, EVFILT_READ, EV_ENABLE, 0, 0, 0);
+            if (kevent(kq, &disable_event, 1, NULL, 0, NULL) < 0)
+            {
+                perror("kevent error");
+            }
+
+            
+            
+                
+            
         }
     }
 

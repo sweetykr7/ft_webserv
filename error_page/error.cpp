@@ -70,13 +70,33 @@ int main() {
         std::string error_page = buffer.str();
 
         // Set up the response message
-        std::string response = "HTTP/1.1 404 Bad Request\r\n";
-        response += "Content-Type: text/html\r\n";
+        std::string response = "HTTP/1.1 100 Continue\r\n";
+        // response += "Content-Type: text/html\r\n";
 
         // Set the `Location` header to the new URL if you want to redirect the client
-        response += "Location: https://www.example.com/new-url\r\n";
+        // response += "Location: https://www.example.com/new-url\r\n";
 
+        // response += "Content-Length: " + std::to_string(error_page.length()) + "\r\n\r\n";
+        response += "\r\n\r\n";
+        // response += error_page;
+
+        // Send response back to client
+        // const char* message = response;
+        send(new_socket, response.c_str(), strlen(response.c_str()), 0);
+
+        
+
+        usleep(5000000);
+
+        response = "";
+        response = "HTTP/1.1 404 Bad Request\r\n";
+        // response += "Content-Type: text/html\r\n";
+
+        // Set the `Location` header to the new URL if you want to redirect the client
+        // response += "Location: https://www.example.com/new-url\r\n";
+        
         response += "Content-Length: " + std::to_string(error_page.length()) + "\r\n\r\n";
+        response += "\r\n\r\n";
         response += error_page;
 
         // Send response back to client

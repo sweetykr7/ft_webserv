@@ -1,0 +1,5 @@
+if(EXISTS "/Users/sooyokim/42seoul/ft_webserv/tdd/build/aa[1]_tests.cmake")
+  include("/Users/sooyokim/42seoul/ft_webserv/tdd/build/aa[1]_tests.cmake")
+else()
+  add_test(aa_NOT_BUILT aa_NOT_BUILT)
+endif()

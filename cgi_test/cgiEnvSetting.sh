@@ -5,7 +5,7 @@ export CONTENT_TYPE=
 export CONTENT_LENGTH=-1
 export SERVER_PROTOCOL=HTTP/1.1
 export GATEWAY_INTERFACE=CGI/1.1
-export REQUEST_METHOD=POST
+export REQUEST_METHOD=GET
 export REQUEST_URI=/directory/youpla.bla
 export PATH_INFO=/directory/youpla.bla
 export PATH_TRANSLATED=$HOME/webserv/tester_dir/YoupiBanane/youpla.bla
@@ -23,3 +23,7 @@ export REMOTE_IDENT=
 export SERVER_SOFTWARE=webserv/1.0
 
 ./cgi_test
+
+
+
+asdsdfadsf/write.cgi

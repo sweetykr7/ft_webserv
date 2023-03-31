@@ -1,0 +1,5 @@
+if(EXISTS "/Users/sooyokim/42seoul/ft_webserv/tdd/build/test[1]_tests.cmake")
+  include("/Users/sooyokim/42seoul/ft_webserv/tdd/build/test[1]_tests.cmake")
+else()
+  add_test(test_NOT_BUILT test_NOT_BUILT)
+endif()

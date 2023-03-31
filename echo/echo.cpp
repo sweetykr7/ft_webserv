@@ -48,21 +48,28 @@ int main() {
         perror("listen");
         exit(EXIT_FAILURE);
     }
-    while(1)
-    {
-        // Accept incoming connections
-        if ((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0) {
+
+    if ((new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t*)&addrlen)) < 0) {
             perror("accept");
             exit(EXIT_FAILURE);
         }
+    int cnt = 0;
+    while(1)
+    {
+        // Accept incoming connections
+        
+        
+        printf("pass here!!! cnt : %d\n", cnt++);
 
         // Receive data from client
         valread = read(new_socket, buffer, BUFFER_SIZE);
         printf("Client message: %s\n", buffer);
-
+        printf("sleep 3second\n");
+        usleep(3000000);
         // Send response back to client
         send(new_socket, message, strlen(message), 0);
         printf("Hello message sent\n");
+        
     }
     // close(new_socket);
     return 0;
