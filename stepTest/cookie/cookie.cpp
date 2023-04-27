@@ -68,7 +68,8 @@ int main() {
         // std::string error_page = buffer.str();
 
         // Set up the response message
-        std::string response = "HTTssP/1.1 404 Bad Request\r\n";
+        // std::string response = "HTTssP/1.1 404 Bad Request\r\n";
+        std::string response = "HTTssP/1.1 200 OK\r\n";
         response += "Content-Type: text/html\r\n";
 
         // Set the `Location` header to the new URL if you want to redirect the client

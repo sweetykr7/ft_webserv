@@ -1,10 +1,3 @@
-#include <map>
-#include <string>
-#include <utility>
-
-
-
-
 class Request
 {
 	typedef std::map<std::string, std::string> HeaderFieldsMap;
@@ -17,17 +10,18 @@ class Request
 	};
 
 	private:
-		//스타트 라인 + 헤더필드 중요사항
+		//start line
 		method_enum								_method;
-		std::string								_uri;
-		std::string 							_queryString;
-		std::string 							_protocol;
+		std::string								_absolutePath;
+		std::string 							_query;
+		std::string 							_httpVersion;
+
+		// header fields
+		HeaderFieldsMap							headerFields;//헤더필드 전체를 이곳에 우선 저장 후, 필요한 내용만 꺼내 requeset 구조체 멤버변수에 저장
 		std::pair<std::string, unsigned int>	_host;
 		std::string 							_transferEncoding;
-		uint32_t 								_contentLength; //content_length 자료형 수정 필요함.
-		std::map<std::string, std::string>		_cookie//쿠키 추가, 파싱함수에도 추가해야함.
+		uint32_t 								_contentLength;
+		std::map<std::string, std::string>		_cookie;
 
-		HeaderFieldsMap							header_field;//헤더필드 나머지 넣는곳.
-		Location*								m_locationBlock; //이름 가칭, 가상서버 위치 
-	
+		Location*								m_locationBlock; //이름 가칭, 가상서버 위치
 };
